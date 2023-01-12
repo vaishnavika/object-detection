@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <title> OBJECT DETECTION ON IMAGES-BEDROOM</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+         <link rel="stylesheet" type="text/css" href="style.css">
+         </head>
+         <body background="background2.jpg">
+            <center> <h1 class="btn btn-info heading">Object Detection</h1> 
+            <a href="index.html" class="btn">Back</a>
+             <br><br><br><br> 
+             <h3 id="status" class="btn btn-danger"></h3>
+              <br> 
+              <h3 class="btn btn-success" style="font-size:15px;"> There are 5 big objects in the image from which cocossd model has detected 3 objects. </h3> 
+              </center>
+
+               <script>
+                objectDetector= "";
+
+img = "";
+status = "";
+object =[];
+
+function preload(){
+img=loadImage('desk.jpg');
+}
+
+function setup(){
+    canvas=createCanvas(640,420);
+    canvas.center();
+    objectDetector = ml5.objectDetector('cocossd',modelLoaded);
+    document.getElementById("status").innerHTML = "Status : Detecting Object";
+}
+
+function modelLoaded(){
+    console.log("Model Loaded!");
+    status=true;
+    objectDetector.detect(img,gotResult);
+}
+
+function gotResult(error,result){
+    if(error){
+        console.log(error);
+    }
+    console.log(result);
+}
+
+function draw(){
+    image(img,0,0,640,420);
+
+    if(status != ""){
+        for(i =0;i<objects.length;i++){
+            document.getElementById("status").innerHTML="Status : Object Detected";
+
+            fill("#FF0000");
+            percent = floor(objects[i].confidence*100);
+            text(objects[i].label+""+percent+"%",objects[i].x +15,objects[i].y+15);
+            noFill();
+            stroke("#FF0000");
+            rect(objects[i].x,objects[i].y, objects[i].width, objects[i].height);
+        }
+    }
+
+}
+
+</script>
+
+         </body>
+</html>
